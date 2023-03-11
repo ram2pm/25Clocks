@@ -1,9 +1,10 @@
 import "./styles.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { useEffect, useState } from "react";
+import { faMinus, faPlus, faTrash } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export default function App() {
-  const [screen, setScreen] = useState("pomodoro");
   const [breakLength, setBreakLength] = useState(5);
   const [sessionLength, setSessionLength] = useState(25);
   const [timeLeft, setTimeLeft] = useState("25:00");
@@ -11,9 +12,15 @@ export default function App() {
   const [currentStatus, setCurrentStatus] = useState("Session");
 
   useEffect(() => {
-    if (screen === "pomodoro") {
+    if (currentStatus === "Session") {
       document.getElementById("app-container").style.backgroundColor =
-        "#ba4949";
+        "#d0394d";
+      document.getElementById("timer-label").style.backgroundColor = "#d0394d";
+    } else {
+      document.getElementById("app-container").style.backgroundColor =
+        "#74C0FC";
+      document.getElementById("timer-label").style.backgroundColor = "#74C0FC";
+      document.getElementById("start_stop").style.border = "solid 2px #74C0FC";
     }
   }, [screen]);
 
@@ -39,6 +46,7 @@ export default function App() {
     setIsRunning(false);
     setBreakLength(5);
     setSessionLength(25);
+    setTimeLeft("25:00");
     setCurrentStatus("Session");
     if (audio) {
       audio.pause();
@@ -82,62 +90,94 @@ export default function App() {
   return (
     <div id="app-container" className="App">
       <div id="container">
-        <div id="break-label">
-          <p>Break Length</p>
-        </div>
-        <div id="session-label">
-          <p>Session Length</p>
-        </div>
-        <div id="break-controls">
-          <div id="break-length">{breakLength}</div>
-          <div
-            id="break-decrement"
-            onClick={() => handleChangeBreak("decrement")}
-          >
-            button
+        <div id="timer-content">
+          <div id="timer-label" style={{ userSelect: "none" }}>
+            {currentStatus}
+          </div>
+          <div id="time-left" style={{ userSelect: "none" }}>
+            {timeLeft.toString().padStart(2, "0").padStart(5, "0")}
           </div>
           <div
-            id="break-increment"
-            onClick={() => handleChangeBreak("increment")}
+            className="d-flex w-75 justify-content-between"
+            style={{ margin: "0 2em" }}
           >
-            button
+            <div
+              id="break-label"
+              className="d-flex flex-column justify-content-center align-items-center"
+            >
+              <div className="d-flex justify-content-center align-items-center">
+                <div
+                  id="break-decrement"
+                  onClick={() => handleChangeBreak("decrement")}
+                >
+                  <FontAwesomeIcon
+                    icon={faMinus}
+                    style={{ display: "block" }}
+                  />
+                </div>
+                <div
+                  id="break-length"
+                  style={{ margin: "0 1em", fontSize: "1.5em" }}
+                >
+                  {breakLength}
+                </div>
+                <div
+                  id="break-increment"
+                  onClick={() => handleChangeBreak("increment")}
+                >
+                  <FontAwesomeIcon icon={faPlus} style={{ display: "block" }} />
+                </div>
+              </div>
+              <p>Break Length</p>
+            </div>
+            <div
+              id="session-label"
+              className="d-flex flex-column justify-content-center align-items-center"
+            >
+              <div className="d-flex justify-content-center align-items-center">
+                <div
+                  id="session-decrement"
+                  onClick={() => handleChangeSession("decrement")}
+                >
+                  <FontAwesomeIcon
+                    icon={faMinus}
+                    style={{ display: "block" }}
+                  />
+                </div>
+                <div
+                  id="session-length"
+                  style={{ margin: "0 1em", fontSize: "1.5em" }}
+                >
+                  {sessionLength}
+                </div>
+                <div
+                  id="session-increment"
+                  onClick={() => handleChangeSession("increment")}
+                >
+                  <FontAwesomeIcon icon={faPlus} style={{ display: "block" }} />
+                </div>
+              </div>
+              <p>Session Length</p>
+            </div>
           </div>
-        </div>
-        <div id="session-controls">
-          <div id="session-length">{sessionLength}</div>
-          <div
-            id="session-decrement"
-            onClick={() => handleChangeSession("decrement")}
-          >
-            button
+          <div className="d-flex justify-content-center align-items-center">
+            <button
+              id="start_stop"
+              onClick={() => setIsRunning((prev) => !isRunning)}
+            >
+              <p style={{ userSelect: "none" }}>
+                {isRunning ? "Pause" : "Start"}
+              </p>
+            </button>
+            <button onClick={handleReset} id="reset">
+              <p style={{ userSelect: "none" }}>Reset</p>
+            </button>
           </div>
-          <div
-            id="session-increment"
-            onClick={() => handleChangeSession("increment")}
-          >
-            button
-          </div>
+          <audio
+            id="beep"
+            src="https://raw.githubusercontent.com/freeCodeCamp/cdn/master/build/testable-projects-fcc/audio/BeepSound.wav"
+          ></audio>
         </div>
-
-        <div id="time-left">
-          {timeLeft.toString().padStart(2, "0").padStart(5, "0")}
-        </div>
-        <div id="timer-label">{currentStatus}</div>
-
-        <button
-          id="start_stop"
-          onClick={() => setIsRunning((prev) => !isRunning)}
-        >
-          Start/Stop
-        </button>
-        <button onClick={handleReset} id="reset">
-          Reset
-        </button>
-
-        <audio
-          id="beep"
-          src="https://raw.githubusercontent.com/freeCodeCamp/cdn/master/build/testable-projects-fcc/audio/BeepSound.wav"
-        ></audio>
       </div>
     </div>
   );
