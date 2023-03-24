@@ -14,7 +14,7 @@ export default function App() {
   useEffect(() => {
     if (currentStatus === "Session") {
       document.getElementById("app-container").style.backgroundColor =
-        "#d0394d";
+        "white";
       document.getElementById("timer-label").style.backgroundColor = "#d0394d";
     } else {
       document.getElementById("app-container").style.backgroundColor =
