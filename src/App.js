@@ -14,7 +14,7 @@ export default function App() {
   useEffect(() => {
     if (currentStatus === "Session") {
       document.getElementById("app-container").style.backgroundColor =
-        "white";
+        "antiquewhite";
       document.getElementById("timer-label").style.backgroundColor = "#d0394d";
     } else {
       document.getElementById("app-container").style.backgroundColor =
@@ -161,6 +161,9 @@ export default function App() {
             </div>
           </div>
           <div className="d-flex justify-content-center align-items-center">
+            <button onClick={handleReset} id="reset">
+              <p style={{ userSelect: "none" }}>Reset</p>
+            </button>
             <button
               id="start_stop"
               onClick={() => setIsRunning((prev) => !isRunning)}
@@ -168,9 +171,6 @@ export default function App() {
               <p style={{ userSelect: "none" }}>
                 {isRunning ? "Pause" : "Start"}
               </p>
-            </button>
-            <button onClick={handleReset} id="reset">
-              <p style={{ userSelect: "none" }}>Reset</p>
             </button>
           </div>
           <audio
